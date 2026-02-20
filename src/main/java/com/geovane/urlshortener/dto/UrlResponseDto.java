@@ -23,7 +23,7 @@ public class UrlResponseDto {
         this.updatedAt = updatedAt;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

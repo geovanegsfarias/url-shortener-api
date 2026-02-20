@@ -6,8 +6,8 @@ import org.hibernate.validator.constraints.URL;
 
 public class UrlRequestDto {
     @JsonProperty("url")
-    @URL
-    @NotBlank
+    @URL(message = "URL is invalid.")
+    @NotBlank(message = "URL must not be blank.")
     private String originalUrl;
 
     public String getOriginalUrl() {

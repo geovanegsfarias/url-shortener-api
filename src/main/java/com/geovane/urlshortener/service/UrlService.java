@@ -1,6 +1,7 @@
 package com.geovane.urlshortener.service;
 
 import com.geovane.urlshortener.dto.UrlRequestDto;
+import com.geovane.urlshortener.exception.ShortCodeNotFoundException;
 import com.geovane.urlshortener.model.Url;
 import com.geovane.urlshortener.repository.UrlRepository;
 import com.geovane.urlshortener.utils.Base62Encoder;
@@ -39,13 +40,17 @@ public class UrlService {
         return urlRepository.findById(id);
     }
 
-    public Optional<Url> findUrlByShortCode(String shortCode) {
-        return urlRepository.findByShortCode(shortCode);
+    public Url findUrlByShortCode(String shortCode) {
+        Optional<Url> url = urlRepository.findByShortCode(shortCode);
+        if (url.isPresent()) {
+            return url.get();
+        }
+        throw new ShortCodeNotFoundException("URL with short code '" + shortCode + "' not found");
     }
 
     @Transactional
     public void deleteUrlByShortCode(String shortCode) {
-        urlRepository.findByShortCode(shortCode).ifPresent(urlRepository::delete);
+        urlRepository.deleteByShortCode(shortCode);
     }
 
     public void incrementAccessCount(Url url) {

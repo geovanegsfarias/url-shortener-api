@@ -3,6 +3,7 @@ package com.geovane.urlshortener.controller;
 import com.geovane.urlshortener.dto.UrlRequestDto;
 import com.geovane.urlshortener.dto.UrlResponseDto;
 import com.geovane.urlshortener.dto.UrlStatsDto;
+import com.geovane.urlshortener.exception.ShortCodeNotFoundException;
 import com.geovane.urlshortener.mapper.UrlMapper;
 import com.geovane.urlshortener.model.Url;
 import com.geovane.urlshortener.service.UrlService;
@@ -27,11 +28,8 @@ public class UrlController {
 
     @GetMapping("/shorten/{shortCode}")
     public ResponseEntity<UrlResponseDto> getUrl(@PathVariable String shortCode) {
-        Optional<Url> url = urlService.findUrlByShortCode(shortCode);
-        if (url.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        UrlResponseDto urlDto = UrlMapper.toDto(url.get());
+        Url url = urlService.findUrlByShortCode(shortCode);
+        UrlResponseDto urlDto = UrlMapper.toDto(url);
         return ResponseEntity.status(HttpStatus.OK).body(urlDto);
     }
 
@@ -44,44 +42,32 @@ public class UrlController {
 
     @PutMapping("/shorten/{shortCode}")
     public ResponseEntity<UrlResponseDto> updateUrl(@PathVariable String shortCode, @Valid @RequestBody UrlRequestDto urlRequestDto) {
-        Optional<Url> url = urlService.findUrlByShortCode(shortCode);
-        if (url.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        Url urlFound = urlService.updateUrl(url.get(), urlRequestDto);
+        Url url = urlService.findUrlByShortCode(shortCode);
+        Url urlFound = urlService.updateUrl(url, urlRequestDto);
         UrlResponseDto urlDto = UrlMapper.toDto(urlFound);
         return ResponseEntity.status(HttpStatus.OK).body(urlDto);
     }
 
     @DeleteMapping("/shorten/{shortCode}")
     public ResponseEntity<Void> deleteUrl(@PathVariable String shortCode) {
-        Optional<Url> url = urlService.findUrlByShortCode(shortCode);
-        if (url.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        urlService.findUrlByShortCode(shortCode);
         urlService.deleteUrlByShortCode(shortCode);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/shorten/{shortCode}/stats")
     public ResponseEntity<UrlStatsDto> urlStats(@PathVariable String shortCode) {
-        Optional<Url> url = urlService.findUrlByShortCode(shortCode);
-        if (url.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        UrlStatsDto urlDto = UrlMapper.toStatusDto(url.get());
+        Url url = urlService.findUrlByShortCode(shortCode);
+        UrlStatsDto urlDto = UrlMapper.toStatusDto(url);
         return ResponseEntity.status(HttpStatus.OK).body(urlDto);
     }
 
     @GetMapping("/{shortCode}")
     public ResponseEntity<Void> redirect(@PathVariable String shortCode) {
-        Optional<Url> url = urlService.findUrlByShortCode(shortCode);
-        if (url.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        urlService.incrementAccessCount(url.get());
+        Url url = urlService.findUrlByShortCode(shortCode);
+        urlService.incrementAccessCount(url);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(url.get().getOriginalUrl()));
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        headers.setLocation(URI.create(url.getOriginalUrl()));
+        return ResponseEntity.status(HttpStatus.FOUND).headers(headers).build();
     }
 }
