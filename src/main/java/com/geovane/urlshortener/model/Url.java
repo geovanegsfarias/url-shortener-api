@@ -8,7 +8,8 @@ import java.time.Instant;
 @Table(name = "urls")
 public class Url {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "url_seq")
+    @SequenceGenerator(name = "url_seq", sequenceName = "url_id_seq", allocationSize = 1)
     private Long id;
     @Column(nullable = false)
     private String originalUrl;

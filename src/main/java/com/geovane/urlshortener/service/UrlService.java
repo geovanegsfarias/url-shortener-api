@@ -22,12 +22,14 @@ public class UrlService {
     }
 
     public Url saveUrl(Url url) {
+        Long id = urlRepository.getNextIdValue();
+        String shortCode = Base62Encoder.encoder(id);
         Instant now = Instant.now();
+        url.setId(id);
+        url.setShortCode(shortCode);
         url.setCreatedAt(now);
         url.setUpdatedAt(now);
-        Url savedUrl = urlRepository.save(url);
-        savedUrl.setShortCode(Base62Encoder.encoder(savedUrl.getId()));
-        return urlRepository.save(savedUrl);
+        return urlRepository.save(url);
     }
 
     public Url updateUrl(Url url, UrlRequestDto urlRequestDto) {

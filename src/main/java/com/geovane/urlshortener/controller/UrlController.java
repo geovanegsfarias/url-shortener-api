@@ -66,8 +66,6 @@ public class UrlController {
     public ResponseEntity<Void> redirect(@PathVariable String shortCode) {
         Url url = urlService.findUrlByShortCode(shortCode);
         urlService.incrementAccessCount(url);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(url.getOriginalUrl()));
-        return ResponseEntity.status(HttpStatus.FOUND).headers(headers).build();
+        return ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, url.getOriginalUrl()).build();
     }
 }
