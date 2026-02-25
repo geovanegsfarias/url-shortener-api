@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS urls;
+CREATE TABLE urls (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    url VARCHAR(255) NOT NULL,
+    short_code VARCHAR(50) UNIQUE NOT NULL,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    access_count INT DEFAULT 0
+);
