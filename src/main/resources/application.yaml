@@ -1,0 +1,14 @@
+spring:
+    application:
+        name: url-shortener-api
+    datasource:
+            url: jdbc:postgresql://localhost:5432/url_shortener
+            username: postgres
+            password: postgres
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+logging:
+    level:
+        com.geovane: DEBUG
