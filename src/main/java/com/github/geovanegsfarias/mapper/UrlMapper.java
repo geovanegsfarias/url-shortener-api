@@ -1,9 +1,9 @@
-package com.geovane.urlshortener.mapper;
+package com.github.geovanegsfarias.mapper;
 
-import com.geovane.urlshortener.dto.CreateUrlRequestDto;
-import com.geovane.urlshortener.dto.UrlResponseDto;
-import com.geovane.urlshortener.dto.UrlStatsResponseDto;
-import com.geovane.urlshortener.model.UrlEntity;
+import com.github.geovanegsfarias.dto.CreateUrlRequestDto;
+import com.github.geovanegsfarias.dto.UrlResponseDto;
+import com.github.geovanegsfarias.dto.UrlStatsResponseDto;
+import com.github.geovanegsfarias.model.UrlEntity;
 
 public class UrlMapper {
 

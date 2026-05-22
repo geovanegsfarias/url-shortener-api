@@ -1,6 +1,6 @@
-package com.geovane.urlshortener.repository;
+package com.github.geovanegsfarias.repository;
 
-import com.geovane.urlshortener.model.UrlEntity;
+import com.github.geovanegsfarias.model.UrlEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

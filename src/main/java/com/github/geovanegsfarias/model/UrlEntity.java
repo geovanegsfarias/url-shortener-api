@@ -1,4 +1,4 @@
-package com.geovane.urlshortener.model;
+package com.github.geovanegsfarias.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;

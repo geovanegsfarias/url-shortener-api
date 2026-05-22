@@ -1,4 +1,4 @@
-package com.geovane.urlshortener.utils;
+package com.github.geovanegsfarias.utils;
 
 public class Base62Encoder {
     private static final String CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";

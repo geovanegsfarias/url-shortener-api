@@ -11,4 +11,4 @@ spring:
             ddl-auto: update
 logging:
     level:
-        com.geovane: DEBUG
+        com.github.geovanegsfarias: DEBUG

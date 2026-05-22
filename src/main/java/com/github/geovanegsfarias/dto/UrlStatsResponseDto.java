@@ -1,12 +1,12 @@
-package com.geovane.urlshortener.dto;
+package com.github.geovanegsfarias.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.Instant;
 
-@Schema(name = "UrlResponse", description = "DTO for details of a shortened URL")
-public record UrlResponseDto(
+@Schema(name = "UrlStats", description = "DTO for more details of a shortened URL")
+public record UrlStatsResponseDto(
         @Schema(description = "The identifier of the URL", example = "50000")
         Long id,
 
@@ -22,6 +22,9 @@ public record UrlResponseDto(
 
         @Schema(description = "Last update timestamp", example = "2026-02-21T20:00:00Z")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
-        Instant updatedAt
+        Instant updatedAt,
+
+        @Schema(description = "Total number of times the URL was accessed", example = "42")
+        long accessCount
 )
 {}

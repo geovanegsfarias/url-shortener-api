@@ -1,9 +1,9 @@
-package com.geovane.urlshortener.service;
+package com.github.geovanegsfarias.service;
 
-import com.geovane.urlshortener.exception.ShortCodeNotFoundException;
-import com.geovane.urlshortener.model.UrlEntity;
-import com.geovane.urlshortener.repository.UrlRepository;
-import com.geovane.urlshortener.utils.Base62Encoder;
+import com.github.geovanegsfarias.exception.ShortCodeNotFoundException;
+import com.github.geovanegsfarias.model.UrlEntity;
+import com.github.geovanegsfarias.repository.UrlRepository;
+import com.github.geovanegsfarias.utils.Base62Encoder;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

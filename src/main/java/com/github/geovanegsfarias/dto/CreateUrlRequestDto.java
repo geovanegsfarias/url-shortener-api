@@ -1,4 +1,4 @@
-package com.geovane.urlshortener.dto;
+package com.github.geovanegsfarias.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

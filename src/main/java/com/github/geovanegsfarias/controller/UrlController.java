@@ -1,18 +1,19 @@
-package com.geovane.urlshortener.controller;
+package com.github.geovanegsfarias.controller;
 
-import com.geovane.urlshortener.dto.CreateUrlRequestDto;
-import com.geovane.urlshortener.dto.ErrorResponseDto;
-import com.geovane.urlshortener.dto.UrlResponseDto;
-import com.geovane.urlshortener.dto.UrlStatsResponseDto;
-import com.geovane.urlshortener.mapper.UrlMapper;
-import com.geovane.urlshortener.model.UrlEntity;
-import com.geovane.urlshortener.service.UrlService;
+import com.github.geovanegsfarias.dto.CreateUrlRequestDto;
+import com.github.geovanegsfarias.dto.ErrorResponseDto;
+import com.github.geovanegsfarias.dto.UrlResponseDto;
+import com.github.geovanegsfarias.dto.UrlStatsResponseDto;
+import com.github.geovanegsfarias.mapper.UrlMapper;
+import com.github.geovanegsfarias.model.UrlEntity;
+import com.github.geovanegsfarias.service.UrlService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
+@RequestMapping("v1")
+@Slf4j
 public class UrlController {
     private final UrlService urlService;
 
@@ -44,10 +47,14 @@ public class UrlController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)))}
     )
-    @GetMapping(value = "/shorten/{shortCode}")
+    @GetMapping("/shorten/{shortCode}")
     public ResponseEntity<UrlResponseDto> getUrl(@PathVariable String shortCode) {
+        log.debug("Received request to find URL with shortCode: {}", shortCode);
+
         UrlEntity url = urlService.findUrlByShortCode(shortCode);
+
         UrlResponseDto response = UrlMapper.mapUrlEntityToUrlResponseDto(url);
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -64,15 +71,20 @@ public class UrlController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)))}
     )
-    @PostMapping(value = "/shorten")
+    @PostMapping("/shorten")
     public ResponseEntity<UrlResponseDto> saveUrl(@Valid @RequestBody CreateUrlRequestDto request) {
+        log.debug("Received request to create shortened URL: {}", request);
+
         UrlEntity url = urlService.saveUrl(UrlMapper.mapCreateUrlRequestDtoToUrlEntity(request));
+
         UrlResponseDto response = UrlMapper.mapUrlEntityToUrlResponseDto(url);
+
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .path("/{shortCode}")
                 .buildAndExpand(url.getShortCode())
                 .toUri();
+
         return ResponseEntity.created(location).body(response);
     }
 
@@ -97,12 +109,18 @@ public class UrlController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)))}
     )
-    @PutMapping(value = "/shorten/{shortCode}")
+    @PutMapping("/shorten/{shortCode}")
     public ResponseEntity<UrlResponseDto> updateUrl(@PathVariable String shortCode, @Valid @RequestBody CreateUrlRequestDto request) {
+        log.debug("Received request to update URL with shortCode: {}", shortCode);
+
         UrlEntity url = urlService.findUrlByShortCode(shortCode);
+
         UrlEntity urlData = UrlMapper.mapCreateUrlRequestDtoToUrlEntity(request);
+
         url = urlService.updateUrl(url, urlData);
+
         UrlResponseDto response = UrlMapper.mapUrlEntityToUrlResponseDto(url);
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -120,9 +138,13 @@ public class UrlController {
                             schema = @Schema(implementation = ErrorResponseDto.class)))}
     )
     @DeleteMapping("/shorten/{shortCode}")
-    public ResponseEntity<Object> deleteUrl(@PathVariable String shortCode) {
+    public ResponseEntity<Void> deleteUrl(@PathVariable String shortCode) {
+        log.debug("Received request to delete URL with shortCode: {}", shortCode);
+
         urlService.findUrlByShortCode(shortCode);
+
         urlService.deleteUrlByShortCode(shortCode);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -139,10 +161,14 @@ public class UrlController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)))}
     )
-    @GetMapping(value = "/shorten/{shortCode}/stats")
+    @GetMapping("/shorten/{shortCode}/stats")
     public ResponseEntity<UrlStatsResponseDto> urlStats(@PathVariable String shortCode) {
+        log.debug("Received request to retrieve URL stats for shortCode: {}", shortCode);
+
         UrlEntity url = urlService.findUrlByShortCode(shortCode);
+
         UrlStatsResponseDto response = UrlMapper.mapUrlEntityToUrlStatsResponseDto(url);
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -160,9 +186,13 @@ public class UrlController {
                             schema = @Schema(implementation = ErrorResponseDto.class)))}
     )
     @GetMapping("/{shortCode}")
-    public ResponseEntity<Object> redirectTo(@PathVariable String shortCode) {
+    public ResponseEntity<Void> redirectTo(@PathVariable String shortCode) {
+        log.debug("Received request to redirect using shortCode: {}", shortCode);
+
         UrlEntity url = urlService.findUrlByShortCode(shortCode);
+
         urlService.incrementAccessCount(url);
+
         return ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, url.getUrl()).build();
     }
 }

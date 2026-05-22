@@ -1,6 +1,6 @@
-package com.geovane.urlshortener.exception;
+package com.github.geovanegsfarias.exception;
 
-import com.geovane.urlshortener.dto.ErrorResponseDto;
+import com.github.geovanegsfarias.dto.ErrorResponseDto;
 import io.micrometer.common.lang.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

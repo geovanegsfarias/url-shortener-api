@@ -1,4 +1,4 @@
-package com.geovane.urlshortener.dto;
+package com.github.geovanegsfarias.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
