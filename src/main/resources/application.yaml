@@ -3,8 +3,8 @@ spring:
         name: url-shortener-api
     datasource:
             url: jdbc:postgresql://localhost:5432/url_shortener
-            username: postgres
-            password: postgres
+            username: ${DB_USERNAME:postgres}
+            password: ${DB_PASSWORD:postgres}
     jpa:
         show-sql: true
         hibernate:

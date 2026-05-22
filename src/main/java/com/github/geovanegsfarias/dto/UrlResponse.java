@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
 
 @Schema(name = "UrlResponse", description = "DTO for details of a shortened URL")
-public record UrlResponseDto(
+public record UrlResponse(
         @Schema(description = "The identifier of the URL", example = "50000")
         Long id,
 

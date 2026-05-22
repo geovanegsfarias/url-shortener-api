@@ -1,35 +1,37 @@
 package com.github.geovanegsfarias.mapper;
 
-import com.github.geovanegsfarias.dto.CreateUrlRequestDto;
-import com.github.geovanegsfarias.dto.UrlResponseDto;
-import com.github.geovanegsfarias.dto.UrlStatsResponseDto;
-import com.github.geovanegsfarias.model.UrlEntity;
+import com.github.geovanegsfarias.dto.UrlPostRequest;
+import com.github.geovanegsfarias.dto.UrlResponse;
+import com.github.geovanegsfarias.dto.UrlStatsResponse;
+import com.github.geovanegsfarias.model.Url;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UrlMapper {
 
-    public static UrlResponseDto mapUrlEntityToUrlResponseDto(UrlEntity entity) {
-        return new UrlResponseDto(
-                entity.getId(),
-                entity.getUrl(),
-                entity.getShortCode(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt()
+    public UrlResponse toUrlResponse(Url url) {
+        return new UrlResponse(
+                url.getId(),
+                url.getUrl(),
+                url.getShortCode(),
+                url.getCreatedAt(),
+                url.getUpdatedAt()
         );
     }
 
-    public static UrlStatsResponseDto mapUrlEntityToUrlStatsResponseDto(UrlEntity entity) {
-        return new UrlStatsResponseDto(
-                entity.getId(),
-                entity.getUrl(),
-                entity.getShortCode(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt(),
-                entity.getAccessCount()
+    public UrlStatsResponse toUrlStatsResponse(Url url) {
+        return new UrlStatsResponse(
+                url.getId(),
+                url.getUrl(),
+                url.getShortCode(),
+                url.getCreatedAt(),
+                url.getUpdatedAt(),
+                url.getAccessCount()
         );
     }
 
-    public static UrlEntity mapCreateUrlRequestDtoToUrlEntity(CreateUrlRequestDto request) {
-        return new UrlEntity(
+    public Url toUrl(UrlPostRequest request) {
+        return new Url(
                 request.url()
         );
     }

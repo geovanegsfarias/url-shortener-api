@@ -1,6 +1,7 @@
 package com.github.geovanegsfarias.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -8,7 +9,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "urls")
-public class UrlEntity {
+public class Url {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,27 +24,27 @@ public class UrlEntity {
     private Instant updatedAt;
     private long accessCount;
 
-    public UrlEntity() {
+    public Url() {
     }
 
-    public UrlEntity(String url) {
+    public Url(String url) {
         this.url = url;
     }
 
-    public UrlEntity(Long id, String url, String shortCode) {
+    public Url(Long id, String url, String shortCode) {
         this.id = id;
         this.url = url;
         this.shortCode = shortCode;
     }
 
-    public UrlEntity(Long id, String url, String shortCode, long accessCount) {
+    public Url(Long id, String url, String shortCode, long accessCount) {
         this.id = id;
         this.url = url;
         this.shortCode = shortCode;
         this.accessCount = accessCount;
     }
 
-    public UrlEntity(String url, String shortCode, Instant createdAt, long accessCount) {
+    public Url(String url, String shortCode, Instant createdAt, long accessCount) {
         this.url = url;
         this.shortCode = shortCode;
         this.createdAt = createdAt;
