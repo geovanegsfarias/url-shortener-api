@@ -1,7 +1,7 @@
 # Encurtador de URL (Spring Boot + Docker)
 ![Java](https://img.shields.io/badge/Java-21-E67E22)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3-85EA2D)
-![JUnit](https://img.shields.io/badge/JUNit-5-F1C40F)
+![JUnit](https://img.shields.io/badge/JUnit-5-F1C40F)
 ![Swagger](https://img.shields.io/badge/Swagger-3-27AE60)
 ![Docker](https://img.shields.io/badge/Docker-29-2980B9)
 
@@ -9,14 +9,14 @@
 
 ### Descrição
 
-API REST desenvolvida com Spring Boot para encurtar URLs longas. O projeto gerencia todo o ciclo de vida das URLs (CRUD), realiza redirecionamentos e fornece dados sobre o uso delas.
+API REST desenvolvida com Spring Boot para encurtar URLs longas. O projeto gerencia todo o ciclo de vida das URLs (CRUD), realiza redirecionamentos e fornece dados estatísticos sobre o uso delas.
 
 ---
 
 ### Funcionalidades
 
 - Criação, busca, atualização e remoção de URLs.
-- Redirecionamento para URL original através de código único.
+- Redirecionamento de uma URL encurtada para a original.
 - Validação de dados usando DTO.
 - Tratamento global de exceções.
 - Testes automatizados (unitário e integração).
@@ -27,9 +27,9 @@ API REST desenvolvida com Spring Boot para encurtar URLs longas. O projeto geren
 
 ### Stack
 
-- Java 21, Spring Boot 3
+- Java 21, Spring Boot 3.5.11
 - JUnit 5, Mockito, Swagger/OpenAPI
-- Docker Compose, PostgreSQL, Maven
+- Docker Compose, PostgreSQL, Flyway
 
 ---
 
@@ -38,7 +38,7 @@ API REST desenvolvida com Spring Boot para encurtar URLs longas. O projeto geren
 <ul>
 
 ```http
-POST /shorten
+POST v1/shorten
 {
   "url": "https://www.exemplo.com/url/longa"
 }
@@ -53,7 +53,7 @@ Response:
   "updatedAt": "2026-02-22T21:06:00Z"
 }
 ```
-O endpoint retorna o código de status http `201 Created` caso os registros da URL sejam criados e armazenados, senão `400 Bad Request` em erro de validação.
+O endpoint retorna `201 Created` caso os registros da URL sejam criados e armazenados, senão `400 Bad Request` em erro de validação.
 
 </ul>
 
@@ -64,7 +64,7 @@ O endpoint retorna o código de status http `201 Created` caso os registros da U
 <ul>
 
 ```
-GET /shorten/{shortCode}
+GET v1/shorten/{shortCode}
 ```
 
 Response:
@@ -77,7 +77,7 @@ Response:
   "updatedAt": "2026-02-22T21:06:00Z"
 }
 ```
-O endpoint retorna o código de status http `200 Ok` caso os registros da URL sejam encontrados, senão `404 Not Found`.
+O endpoint retorna `200 Ok` caso os registros da URL sejam encontrados, senão `404 Not Found`.
 
 </ul>
 
@@ -87,22 +87,12 @@ O endpoint retorna o código de status http `200 Ok` caso os registros da URL se
 <ul>
 
 ```http
-PUT /shorten/{shortCode}
+PUT v1/shorten/{shortCode}
 {
   "url": "https://www.exemplo.com/nova/url/longa"
 }
 ```
-Response:
-```json
-{
-  "id": 107,
-  "url": "https://www.exemplo.com/nova/url/longa",
-  "shortCode": "1j",
-  "createdAt": "2026-02-22T21:06:00Z",
-  "updatedAt": "2026-02-22T21:55:00Z"
-}
-```
-O endpoint retorna o código de status http `200 Ok` caso os registros da URL sejam atualizados, senão `400 Bad Request` ou `404 Not Found` caso não sejam encontrados.
+O endpoint retorna `204 No Content` caso os registros da URL sejam atualizados, senão `400 Bad Request` ou `404 Not Found` caso não sejam encontrados.
 
 </ul>
 
@@ -112,9 +102,9 @@ O endpoint retorna o código de status http `200 Ok` caso os registros da URL se
 <ul>
 
 ```
-DELETE /shorten/{shortCode}
+DELETE v1/shorten/{shortCode}
 ```
-O endpoint retorna o código de status http `204 No Content` caso os registros da URL sejam encontrados e apagados, senão `404 Not Found`.
+O endpoint retorna `204 No Content` caso os registros da URL sejam encontrados e apagados, senão `404 Not Found`.
 
 </ul>
 
@@ -124,7 +114,7 @@ O endpoint retorna o código de status http `204 No Content` caso os registros d
 <ul>
 
 ```
-GET /shorten/{shortCode}/stats
+GET v1/shorten/{shortCode}/stats
 ```
 Response:
 ```json
@@ -137,7 +127,7 @@ Response:
   "accessCount": 6
 }
 ```
-O endpoint retorna o código de status http `200 Ok` caso os registros da URL curta sejam encontrados, senão `404 Not Found`.
+O endpoint retorna `200 Ok` caso os registros da URL curta sejam encontrados, senão `404 Not Found`.
 
 </ul>
 
@@ -147,9 +137,9 @@ O endpoint retorna o código de status http `200 Ok` caso os registros da URL cu
 <ul>
 
 ```
-GET /{shortCode}
+GET v1/{shortCode}
 ```
-O endpoint retorna o código de status http <code>302 Found</code> caso os registros da URL sejam encontrados, senão <code>404 Not Found</code>.
+O endpoint retorna <code>302 Found</code> caso os registros da URL sejam encontrados, senão <code>404 Not Found</code>.
 
 </ul>
 
@@ -178,31 +168,30 @@ git clone https://github.com/geovanegsfarias/url-shortener-api.git
 3. Configure as variáveis de ambiente
 
 <ul>
-Crie um arquivo <code>.env</code> na raiz do projeto com as credenciais do banco de dados:
+Crie um arquivo <code>.env</code> na raiz do projeto baseado no <code>.env.example</code> disponibilizado na raiz do projeto e adicione suas credenciais.
 
-```
-POSTGRES_DB=url_shortener_db
-POSTGRES_USER=root
-POSTGRES_PASSWORD=password
-```
+
 </ul>
 
-4. Suba os containers
+4. Suba o container do PostgreSQL
 <ul>
-O arquivo <code>docker-compose</code> configura todo o funcionamento da aplicação:
 
 ```bash
-docker compose up -d
+docker compose up
 ```
 
 </ul>
 
-5. Acesse a API
+5. Rode a aplicação via terminal
 <ul>
+
+```bash
+./mvnw spring-boot:run
+```
 
 - A aplicação está disponível em http://localhost:8080.
 
-- Documentação com Swagger em http://localhost:8080/swagger-ui.html.
+- Documentação com Swagger em http://localhost:8080/swagger-ui/index.html.
 
 - Execute todos os testes automatizados com `./mvnw test`.
 </ul>

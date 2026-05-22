@@ -1,11 +1,10 @@
 package com.github.geovanegsfarias.controller;
 
 import com.github.geovanegsfarias.dto.UrlPostRequest;
-import com.github.geovanegsfarias.exception.ErrorResponse;
 import com.github.geovanegsfarias.dto.UrlResponse;
 import com.github.geovanegsfarias.dto.UrlStatsResponse;
+import com.github.geovanegsfarias.exception.ErrorResponse;
 import com.github.geovanegsfarias.mapper.UrlMapper;
-import com.github.geovanegsfarias.model.Url;
 import com.github.geovanegsfarias.service.UrlService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -97,7 +96,7 @@ public class UrlController {
             description = "Updates the original URL of an existing short code.",
             tags = {"URL Operations"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "URL successfully updated"),
+            @ApiResponse(responseCode = "204", description = "URL successfully updated"),
             @ApiResponse(
                     responseCode = "400",
                     description = "Invalid request data",
