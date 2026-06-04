@@ -31,8 +31,6 @@ public class UrlMapper {
     }
 
     public Url toUrl(UrlPostRequest request) {
-        return new Url(
-                request.url()
-        );
+        return Url.builder().url(request.url()).build();
     }
 }
