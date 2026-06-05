@@ -23,7 +23,7 @@ class UrlServiceTest {
     private final UrlUtils utils = new UrlUtils();
 
     @Test
-    @DisplayName("findByShortCode returns a Url with given shortCode")
+    @DisplayName("findByShortCode returns a url with given shortCode")
     @Order(1)
     void findByShortCode_ReturnsUrl_WhenSuccessful() {
         var expectedUrl = utils.newSavedUrl();

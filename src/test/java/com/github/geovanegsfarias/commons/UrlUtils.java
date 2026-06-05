@@ -5,6 +5,7 @@ import com.github.geovanegsfarias.utils.Base62Encoder;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 
 @Component
 public class UrlUtils {
@@ -16,12 +17,14 @@ public class UrlUtils {
     }
 
     public Url newSavedUrl() {
+        var instant = Instant.parse("2026-06-04T20:00:00Z");
+
         return Url.builder()
                 .id(1L)
                 .url("https://github.com/")
                 .shortCode(Base62Encoder.encoder(1L))
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
+                .createdAt(instant)
+                .updatedAt(instant)
                 .accessCount(0)
                 .build();
     }
