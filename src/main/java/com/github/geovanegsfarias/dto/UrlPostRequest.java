@@ -7,8 +7,8 @@ import org.hibernate.validator.constraints.URL;
 @Schema(name = "UrlRequest", description = "DTO for creating or updating a shortened URL")
 public record UrlPostRequest(
         @Schema(description = "The URL to be shortened", example = "https://github.com/geovanegsfarias")
-        @NotBlank(message = "URL must not be blank.")
-        @URL(message = "URL is invalid.")
+        @NotBlank(message = "URL must not be blank")
+        @URL(message = "Invalid URL format")
         String url
 )
 {}
