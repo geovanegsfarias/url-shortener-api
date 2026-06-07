@@ -84,7 +84,7 @@ public class UrlController {
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
-                .path("/{shortCode}")
+                .path("/v1/{shortCode}")
                 .buildAndExpand(savedUrl.getShortCode())
                 .toUri();
 

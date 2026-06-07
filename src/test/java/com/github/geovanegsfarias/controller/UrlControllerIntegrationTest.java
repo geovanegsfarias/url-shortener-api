@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @ActiveProfiles("itest")
-class UrlControllerIT {
+class UrlControllerIntegrationTest {
     private static final String URL = "/v1";
     @LocalServerPort
     int port;
@@ -279,6 +279,10 @@ class UrlControllerIT {
                 .statusCode(HttpStatus.FOUND.value())
                 .header(HttpHeaders.LOCATION, savedUrl.getUrl())
                 .log().all();
+
+        var url = repository.findUrlByShortCode(shortCode).orElseThrow(() -> new UrlNotFoundException("URL not found"));
+
+        Assertions.assertThat(url.getAccessCount()).isEqualTo(1); // verificando se foi incrementado
     }
 
     @Test

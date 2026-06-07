@@ -68,13 +68,16 @@ class UrlServiceTest {
     @DisplayName("update updates a url")
     @Order(4)
     void update_UpdatesUrl_WhenSuccessful() {
-        var urlToUpdate = utils.newSavedUrl();
+        var savedUrl = utils.newSavedUrl();
 
-        BDDMockito.when(repository.findUrlByShortCode(urlToUpdate.getShortCode())).thenReturn(Optional.of(urlToUpdate));
-        BDDMockito.when(repository.save(urlToUpdate)).thenReturn(urlToUpdate);
+        var urlToUpdate = utils.newSavedUrl().withUrl("https://www.youtube.com/");
 
-        Assertions.assertThatNoException().isThrownBy(() -> service.update(urlToUpdate));
-        BDDMockito.verify(repository).save(urlToUpdate);
+        BDDMockito.when(repository.findUrlByShortCode(savedUrl.getShortCode())).thenReturn(Optional.of(savedUrl));
+
+        service.update(urlToUpdate);
+
+        Assertions.assertThat(savedUrl.getUrl()).isEqualTo(urlToUpdate.getUrl());
+        BDDMockito.verify(repository).save(savedUrl);
     }
 
     @Test
@@ -101,6 +104,8 @@ class UrlServiceTest {
         BDDMockito.doNothing().when(repository).delete(urlToDelete);
 
         Assertions.assertThatNoException().isThrownBy(() -> service.delete(urlToDelete.getShortCode()));
+
+        BDDMockito.verify(repository).delete(urlToDelete);
     }
 
     @Test

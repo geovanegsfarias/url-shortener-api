@@ -14,6 +14,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
+@With
 public class Url {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
